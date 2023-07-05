@@ -16,16 +16,14 @@ friendly access to the application specific data blcoks.
 
 ## Installation
 
-Both this package and [`InterProcessCommunication.jl`](
-https://github.com/emmt/InterProcessCommunication.jl.git) are not (yet?) in the
-General package registry so the must be installed from GitHub directly. . This
-can be done using `Pkg` functions or using the `Pkg`-mode of the Julia REPL.
+This package is not yet in the General package registry so it must be installed
+from GitHub directly. . This can be done using `Pkg` functions or using the
+`Pkg`-mode of the Julia REPL.
 
 ### Using `Pkg` functions
 
-```
+```julia
 using Pkg
-Pkg.add("https://github.com/emmt/InterProcessCommunication.jl")
 Pkg.add("https://github.com/david-macmahon/HashpipeDatabufs.jl")
 ```
 
@@ -35,10 +33,9 @@ In the Julia REPL, pressing `]` at the start of the line will switch the REPL
 to `Pkg`-mode. . The prompe will change from `julia>` to `([env]) pkg>`, where
 `[env]` is the name of the currently active environment (e.g. `@v1.9`).
 
-```
+```julia
 julia> ]
 (@v1.9) pkg> # Prompt changes immediately upon pressing `]`
-(@v1.9) pkg> add https://github.com/emmt/InterProcessCommunication.jl
 (@v1.9) pkg> add https://github.com/david-macmahon/HashpipeDatabufs.jl
 ```
 
@@ -51,7 +48,7 @@ its constructors accept a type parameter specifying the `AbstractBlock` subtype
 that should be used to wrap the data blocks of the Hashpipe data buffer.  The
 most frequently used `HashpipeDatabuf` constructor has this method signature:
 
-```
+```julia
 HashpipeDatabuf{B}(
     instance_id::Integer, databuf::Integer;
     keyfile=hashpipe_keyfile(), readonly=true
@@ -80,7 +77,7 @@ HashpipeDatabuf{B}(
   regions for read only.  `HashpipeDatabufs.jl` does not yet have the semaphore
   functionality to know when to safely write into the shared memory buffer, so
   it is recommended to always use the default value of `true`.
-  
+
 ## Databuf layouts
 
 The `HashpipeDatabuf` struct has two fields: `header` and `block`.
@@ -89,7 +86,7 @@ The `header` field wraps the Hashpipe data buffer header as a 0-dimensional
 Array containing a `Header` object.  To access the `Header` object itself, the
 `header` field can be indexed using an empty indexing:
 
-```
+```julia
 # Create HashpipeDatabuf structure for instance 0, data buffer 1
 hdb = HashpipeDatabuf(0, 1)
 
@@ -105,7 +102,7 @@ application specific type.
 Here is how to see the first four words of the last data block in the first data
 buffer using `GenericBlock`:
 
-```
+```julia
 ENV["HASHPIPE_KEYFILE"] = "/home/obs"
 
 hdb = HashpipeDatabuf(0, 1)
