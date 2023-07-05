@@ -3,21 +3,13 @@
 # Convenience functions for working with HashpipeDatabufs and the `semctl`
 # system call.
 
-const GETALL = @static Sys.islinux() ? 13 :
-                       Sys.isbsd()   ?  6 :
-                       -1 # unknown/unsupported
-
 function get_block_states!(h::Header, states::Vector{UInt16})
-@static if Sys.islinux() || Sys.isbsd()
     @assert length(states) >= h.n_block "states vector is too short"
     rc = @ccall semctl(
-        h.semid::Cint, 0::Cint, GETALL::Cint, states::Ptr{Cushort}
+        h.semid::Cint, 0::Cint, IPC.GETALL::Cint, states::Ptr{Cushort}
     )::Cint
     systemerror("semctl", rc != 0)
     states
-else
-    error("unknown/unsupported system $(Sys.KERNEL)")
-end
 end
 
 function get_block_states(h::Header)
